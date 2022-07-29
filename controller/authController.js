@@ -1,5 +1,5 @@
 const User = require("../model/userModel");
-const catchError = require("../utility/catchError");
+const catchError = require("../utility/catchError2");
 const jwt=require('jsonwebtoken');
 const appError = require("../utility/appError");
 const bcrypt=require('bcrypt');
@@ -98,6 +98,10 @@ const protect = catchError(async (req, res, next) => {
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     token = req.headers.authorization.split(' ')[1];
   }
+  else if(req.cookies.jwt){  // client tomonidan kelayotgan cookieni olish
+    token=req.cookies.jwt
+  }
+
   if (!token || token=='null') {
     return next(
       new appError('Siz birinchi royhatdan oting yoki tizimga kiring')
@@ -126,9 +130,48 @@ const protect = catchError(async (req, res, next) => {
   }
 
   req.user=user,
+  res.locals.user=user
   next();
 });
 
+/////////////// isSignin //////////////////
+const isSignIn= async (req, res, next) => {
+
+  // 1. Token bor yoqligini tekshirish headerdan
+
+  let token;
+  if(req.cookies.jwt){  // client tomonidan kelayotgan cookieni olish
+    token=req.cookies.jwt
+  }
+
+  if (!token || token=='null') {
+    return next();
+  }
+
+  // 2.Tokenni tekshirish user olib ketgan token bn serverni tokeni
+
+    const tokencha=jwt.verify(token, process.env.JWT_SECRET);
+
+    console.log(tokencha)
+  // 3.Tokenni ichidan idni olib data basedagi userlarni id si bilan solishtirish
+
+  const user=await User.findOne({_id:tokencha.id})
+  if(!user){
+    return next()
+  }
+  // 4. Agar parol o'zgargan bo'lsa tokenni amal qilmasligini tekshirish
+
+  if(user.passwordChangedDate){
+    // console.log(tokencha.iat)
+    // console.log(user.passwordChangedDate.getTime()/1000)
+    if(user.passwordChangedDate.getTime()/100>tokencha.iat){
+      return next()
+    }
+  }
+
+  res.locals.user=user // pug userni berihs malumotlarnini
+  return next();
+};
 
 //////////////////////////  role  ///////////////////////
 
@@ -229,4 +272,4 @@ const resentPassword=catchError(async(req,res,next)=>{
   next()
 })
 
-module.exports={signup,login,protect,role,forgotpassword,resentPassword,createToken}
+module.exports={signup,login,protect,role,forgotpassword,resentPassword,createToken,isSignIn}

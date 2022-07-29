@@ -10,8 +10,10 @@ const sanitize=require('express-mongo-sanitize') //req ni bodyni himoyalash un m
 const xss=require('xss-clean')  // html ichiga virus tiqib yubormoqchi bolsa ushlab qoladi 
 const hpp=require('hpp') // url dagi hatolarni ushlaydi
 const path=require('path')
+const cookieParser=require('cookie-parser')
 
 const appErrorController=require('./controller/appErrorController')
+const { urlencoded } = require('express')
 const app=express();
 
 
@@ -31,6 +33,10 @@ app.use('/api',limiter)
 app.use(helmet())
 
 app.use(express.json({limit:'100kb'}))  // req sini o'lchamani belgilaydi
+
+app.use(cookieParser())
+
+app.use(urlencoded({limit:'10kb'})) // html dan maloumt jo'natganimizda server o'qib biladi
 
 app.use(sanitize())
 
