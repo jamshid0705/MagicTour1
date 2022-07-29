@@ -1,0 +1,43 @@
+extends base
+
+block content
+  main.main
+    .card-container
+      each tours in tour
+        .card 
+          .card__header
+            .card__picture
+              .card__picture-overlay &nbsp;
+              img(src=`/img/tours/${tours.imageCover}` alt=`${tours.name}`).card__picture-img
+            h3.heading-tertirary
+              span=tours.name
+          .card__details
+            h4.card__sub-heading=`${tours.difficulty} ${tours.duration}-day tour`
+            p.card__text 
+              Breathtaking=tours.summary
+            .card__data 
+              svg.card__icon  
+                use(xlink:href="img/icons.svg#icon-map-pin")
+              span=tours.startLocation.description
+            .card__data 
+              svg.card__icon  
+                use(xlink:href="img/icons.svg#icon-map-pin")
+              span=tours.startDates[0].toLocaleString('en-US',{day:'numeric',weekday:'long',month:'numeric'})
+            .card__data 
+              svg.card__icon  
+                use(xlink:href="img/icons.svg#icon-map-pin")
+              span=`${tours.locations.length} stops`
+            .card__data 
+              svg.card__icon  
+                use(xlink:href="img/icons.svg#icon-map-pin")
+              span=`${tours.maxGroupSize} people`  
+          .card__footer 
+            p 
+              span.card__footer-value=`$${tours.price}`
+              |
+              span.card__footer-text per person
+            p.card__ratings
+              span.card__footer-value=tours.ratingsAverage
+              |
+              span.card__footer-text=`rating (${tours.ratingsQuantity})`
+            a(href=`/tour/${tours.id}`).btn.btn--green.btn--small details  

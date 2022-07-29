@@ -1,0 +1,32 @@
+const Reviews = require("../model/reviews");
+const Tour = require("../model/tourModel");
+const catchError = require("../utility/catchError2");
+
+///////// get all ////////////////////
+const getAllTour=catchError(async(req,res,next)=>{
+  const data=await Tour.find()
+
+  res.status(200).render('overview',{
+    tour:data
+  })
+})
+
+////////////// get id //////////////////
+const getIdTour=catchError(async(req,res,next)=>{
+  const data=await Tour.findById(req.params.id).populate('guides').populate('reviews')
+
+  const rev=await Reviews.find({tour:req.params.id}).populate('user')
+  console.log(rev)
+
+  res.status(200).render('tour',{
+    tour:data,
+    review:rev
+  })
+})
+
+////////////// login ////////////////////
+const login=catchError(async(req,res,next)=>{
+  res.status(200).render('login')
+})
+
+module.exports={getAllTour,getIdTour,login}
