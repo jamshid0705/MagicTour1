@@ -8,5 +8,6 @@ Router.route('/').get(authController.isSignIn,viewController.getAllTour)
 Router.route('/overview').get(authController.isSignIn,viewController.getAllTour)
 Router.route('/tour/:id').get(authController.isSignIn,viewController.getIdTour)
 Router.route('/login').get(authController.isSignIn,viewController.login)
+Router.route('/logout').post(authController.logout)
 
 module.exports=Router

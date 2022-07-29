@@ -1,5 +1,6 @@
 const Reviews = require("../model/reviews");
 const Tour = require("../model/tourModel");
+const appError = require("../utility/appError");
 const catchError = require("../utility/catchError2");
 
 ///////// get all ////////////////////
@@ -17,6 +18,10 @@ const getIdTour=catchError(async(req,res,next)=>{
 
   const rev=await Reviews.find({tour:req.params.id}).populate('user')
   console.log(rev)
+
+  if(!data){
+    return next(new appError('Bunday page mavjud emas !',404))
+  }
 
   res.status(200).render('tour',{
     tour:data,

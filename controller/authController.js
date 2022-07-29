@@ -102,7 +102,7 @@ const protect = catchError(async (req, res, next) => {
     token=req.cookies.jwt
   }
 
-  if (!token || token=='null') {
+  if (!token || token=='logout') {
     return next(
       new appError('Siz birinchi royhatdan oting yoki tizimga kiring')
     );
@@ -272,4 +272,15 @@ const resentPassword=catchError(async(req,res,next)=>{
   next()
 })
 
-module.exports={signup,login,protect,role,forgotpassword,resentPassword,createToken,isSignIn}
+////////////////////////////////////////////////// logout ////////////////////////////////////////////////////////////////////
+
+const logout=(req,res,next)=>{
+  res.cookie('jwt',"logout",{
+    httpOnly:true,
+  })
+  res.status(200).json({
+    status: "success"
+  })
+}
+
+module.exports={signup,login,protect,role,forgotpassword,resentPassword,createToken,isSignIn,logout}

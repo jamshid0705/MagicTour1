@@ -1,20 +1,22 @@
 header.header 
-      nav.nav.nav--tours 
-        a(href='/overview.html').nav__el All tours 
-        form(action='#').nav__search
-          button.nav__search-btn 
-            svg
-              use(xlink:href="img/icons.svg#icon-search")
-          input(type='text',placeholder='Search tours').nav__search-input
-      .header__logo 
-        img(src='/img/logo-white.png' alt='Natours logo')
+  nav.nav.nav--tours 
+    a(href='/').nav__el All tours 
+    form(action='#').nav__search
+      button.nav__search-btn 
+        svg
+          use(xlink:href="img/icons.svg#icon-search")
+      input(type='text',placeholder='Search tours').nav__search-input
+  .header__logo 
+    img(src='/img/logo-white.png' alt='Natours logo')
 
-      nav.nav.nav--user
-        if user
-          a(href="#").nav__el
-            img(src=`img/users/${user.photo}` alt=`user.name`).nav__user-img
-            span=user.name.split(' ')[0]
-          a(href="#").nav__el.nav__el--logout LOGOUT  
-        else 
-          a(href='/login').nav__el Log in 
-          button.nav__el.nav__el--cta Sign up 
+  nav.nav.nav--user
+    if user
+      a(href="#").nav__el
+        img(src=`img/users/${user.photo}` alt=`user.name`).nav__user-img
+        span=user.name.split(' ')[0]
+      button.nav__el.nav__el--logout LOGOUT  
+    else 
+      a(href='/login').nav__el Log in 
+      button.nav__el.nav__el--cta Sign up
+    if user     
+      script(src='/js/logout.js')    

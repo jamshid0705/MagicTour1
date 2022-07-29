@@ -1,4 +1,4 @@
-import axios from 'axios';
+// import axios from 'axios';
 
 const enterSystem=async(email,password)=>{
   const res=await axios({
@@ -18,5 +18,11 @@ const enterSystem=async(email,password)=>{
     console.log(res)
 }
 
+document.querySelector('.form').addEventListener('submit',(e)=>{
+  e.preventDefault();
+  const email=document.querySelector('#email').value;
+  const password=document.querySelector('#password').value
+  enterSystem(email,password)
+  console.log(email,password)
+})
 
-export default enterSystem

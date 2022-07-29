@@ -8,18 +8,35 @@ module.exports= function(err,req,res,next){
   }
 
   if(process.env.NODE_ENV==='DEVELOPMENT'){
-    res.status(err.statusCode).json({
-      status:err.status,
-      message:err.message,
-      statusCode:err.statusCode,
-      stack:err.stack
-    })
+
+    if(req.originalUrl.startsWith('/api')){
+      res.status(err.statusCode).json({
+        status:err.status,
+        message:err.message,
+        statusCode:err.statusCode,
+        stack:err.stack
+      })
+    }
+    else{
+      res.status(err.statusCode).render('error',{
+        message:err.message
+      })
+    }
+    
   }
   
   if(process.env.NODE_ENV==='PRODUCTION'){
-    res.status(err.statusCode).json({
-      status:err.status,
-      message:err.message,
-    })
+
+    if(req.originalUrl.startsWith('/api')){
+      res.status(err.statusCode).json({
+        status:err.status,
+        message:err.message,
+      })
+    }else{
+      res.status(err.statusCode).render('error',{
+        message:"Iltimos yana urinib ko'ring !"
+      })
+    }
+    
   }
 }
