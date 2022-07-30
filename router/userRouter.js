@@ -15,6 +15,6 @@ userRouter.route('/updatemepassword').patch(auth.protect,User.updateMePassword)
 userRouter.route('/updateMeData').patch(auth.protect,User.updateMe)
 
 userRouter.route('/').get(User.getAllUsers).post(auth.protect,User.addUsers)  // middlewarelar 
-userRouter.route('/:id').get(auth.protect,User.updateUsers).patch(auth.protect,User.getIdUsers).delete(auth.protect,auth.role(['admin','team-lead']),User.deleteUsers)
+userRouter.route('/:id').patch(auth.protect,User.updateUsers).patch(auth.protect,User.getIdUsers).delete(auth.protect,auth.role(['admin','team-lead']),User.deleteUsers)
 
 module.exports=userRouter

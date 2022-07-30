@@ -1,5 +1,3 @@
-
-
 document.querySelector('.nav__el--logout').addEventListener('click',async(e)=>{
   try {
     const res=await axios({

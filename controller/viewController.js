@@ -34,4 +34,9 @@ const login=catchError(async(req,res,next)=>{
   res.status(200).render('login')
 })
 
-module.exports={getAllTour,getIdTour,login}
+///////////// account ////////////
+const account=catchError(async(req,res,next)=>{
+  res.status(200).render('account')
+})
+
+module.exports={getAllTour,getIdTour,login,account}

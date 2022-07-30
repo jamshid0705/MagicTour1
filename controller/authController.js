@@ -76,7 +76,7 @@ const login=catchError(async(req,res,next)=>{
 
   // 4 JWT token berish
   const token=createToken(user._id)
-
+  console.log("signin",token)
   saveTokenCookie(token,res,req)
   // 5 javob qaytarish
   res.status(200).json({
@@ -100,9 +100,10 @@ const protect = catchError(async (req, res, next) => {
   }
   else if(req.cookies.jwt){  // client tomonidan kelayotgan cookieni olish
     token=req.cookies.jwt
+    console.log(req.cookies.jwt)
   }
 
-  if (!token || token=='logout') {
+  if (!token || token=='null') {
     return next(
       new appError('Siz birinchi royhatdan oting yoki tizimga kiring')
     );
@@ -122,15 +123,16 @@ const protect = catchError(async (req, res, next) => {
   // 4. Agar parol o'zgargan bo'lsa tokenni amal qilmasligini tekshirish
 
   if(user.passwordChangedDate){
-    console.log(tokencha.iat)
+    console.log(tokencha.exp)
     console.log(user.passwordChangedDate.getTime()/1000)
-    if(user.passwordChangedDate.getTime()/100>tokencha.iat){
+    if(user.passwordChangedDate.getTime()/1000>tokencha.exp){
       return next(new appError('Sizning tokeningiz yaroqsiz! iltimos qaytadan bazaga kiring !'))
     }
   }
 
   req.user=user,
   res.locals.user=user
+  
   next();
 });
 
@@ -142,9 +144,10 @@ const isSignIn= async (req, res, next) => {
   let token;
   if(req.cookies.jwt){  // client tomonidan kelayotgan cookieni olish
     token=req.cookies.jwt
+    console.log("isSign",token)
   }
 
-  if (!token || token=='null') {
+  if (!token || token=='null' || token=='logout') {
     return next();
   }
 
@@ -152,7 +155,7 @@ const isSignIn= async (req, res, next) => {
 
     const tokencha=jwt.verify(token, process.env.JWT_SECRET);
 
-    console.log(tokencha)
+    // console.log(tokencha)
   // 3.Tokenni ichidan idni olib data basedagi userlarni id si bilan solishtirish
 
   const user=await User.findOne({_id:tokencha.id})
@@ -162,14 +165,15 @@ const isSignIn= async (req, res, next) => {
   // 4. Agar parol o'zgargan bo'lsa tokenni amal qilmasligini tekshirish
 
   if(user.passwordChangedDate){
-    // console.log(tokencha.iat)
-    // console.log(user.passwordChangedDate.getTime()/1000)
-    if(user.passwordChangedDate.getTime()/100>tokencha.iat){
+    console.log(tokencha.exp)
+    console.log(user.passwordChangedDate.getTime()/1000)
+    if(user.passwordChangedDate.getTime()/1000>tokencha.exp){
       return next()
     }
   }
 
   res.locals.user=user // pug userni berihs malumotlarnini
+  console.log("user",user)
   return next();
 };
 

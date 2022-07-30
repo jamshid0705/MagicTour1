@@ -85,7 +85,7 @@ const update=catchError(async(req,res,next,Model)=>{
   if(!data){
     return next(new appError('Bunday id lik user mavjud emas !',404));
   }
-
+  
   responseFunction(res,202,data);
 })
 

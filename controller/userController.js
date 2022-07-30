@@ -1,6 +1,6 @@
 const fs = require('fs');
 const User = require('../model/userModel');
-const catchError = require('../utility/catchError');
+const catchError = require('../utility/catchError2');
 const bcrypt=require('bcrypt')
 
 const CreateToken=require('../controller/authController')
@@ -154,7 +154,7 @@ const updateMePassword=catchError(async(req,res,next)=>{
   const token=CreateToken.createToken(user._id)
 
   res.status(200).json({
-    data:token
+    token:token
   })
 
   next()
