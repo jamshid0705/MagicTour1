@@ -78,7 +78,7 @@ userSchema.methods.hashTokenMethod=function(){
   return token
 }
 
-
+console.log('usermodel')
 
 
 const User = mongoose.model('users', userSchema);

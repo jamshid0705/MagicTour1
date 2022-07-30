@@ -1,5 +1,6 @@
 
 const settingAccount=async(name,email)=>{
+
   const res=await axios({
     method:'PATCH',
     url:`http://localhost:8000/api/v1/users/updateMeData`,
@@ -10,12 +11,15 @@ const settingAccount=async(name,email)=>{
   })
     if(res.status==200){
       alert('Sizning name va email ingiz yangilandi !')
+
     }
   console.log(res)
+
 }
 
 
 const passwordAccount=async(password,newpassword,passwordConfirm)=>{
+  
   const res=await axios({
     method:'PATCH',
     url:'http://localhost:8000/api/v1/users/updatemepassword',
@@ -25,10 +29,11 @@ const passwordAccount=async(password,newpassword,passwordConfirm)=>{
       newpasswordConfirm:passwordConfirm
     }
   })
-    if(res.status==202){
+    if(res.status==200){
       alert('Sizning passwordingiz yangilandi !')
     }
   console.log(res)
+ 
 }
 
 document.querySelector('.btn--setting').addEventListener('click',(e)=>{
@@ -38,6 +43,9 @@ document.querySelector('.btn--setting').addEventListener('click',(e)=>{
 
   console.log(name,email)
   settingAccount(name,email)
+ 
+  document.querySelector('#name').value=' '
+  document.querySelector('#email').value=' '
 })
 
 document.querySelector('.btn--password').addEventListener('click',(e)=>{
@@ -48,5 +56,9 @@ document.querySelector('.btn--password').addEventListener('click',(e)=>{
 
   console.log(password,newpassword,passwordConfirm)
   passwordAccount(password,newpassword,passwordConfirm)
+
+  document.querySelector('#password-current').value=' '
+  document.querySelector('#password').value=' '
+  document.querySelector('#password-confirm').value=' '
 
 })
