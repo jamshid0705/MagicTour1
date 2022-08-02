@@ -1,6 +1,7 @@
 
 const settingAccount=async(name,email)=>{
 
+ try {
   const res=await axios({
     method:'PATCH',
     url:`http://localhost:8000/api/v1/users/updateMeData`,
@@ -14,25 +15,32 @@ const settingAccount=async(name,email)=>{
 
     }
   console.log(res)
+ } catch (error) {
+  alert(error.response.data.message)
+ }
 
 }
 
 
 const passwordAccount=async(password,newpassword,passwordConfirm)=>{
+  try {
+    const res=await axios({
+      method:'PATCH',
+      url:'http://localhost:8000/api/v1/users/updatemepassword',
+      data:{
+        oldpassword:password,
+        newpassword:newpassword,
+        newpasswordConfirm:passwordConfirm
+      }
+    })
+      if(res.status==200){
+        alert('Sizning passwordingiz yangilandi !')
+      }
+    console.log(res)
+  } catch (error) {
+    alert(error.response.data.message)
+  }
   
-  const res=await axios({
-    method:'PATCH',
-    url:'http://localhost:8000/api/v1/users/updatemepassword',
-    data:{
-      oldpassword:password,
-      newpassword:newpassword,
-      newpasswordConfirm:passwordConfirm
-    }
-  })
-    if(res.status==200){
-      alert('Sizning passwordingiz yangilandi !')
-    }
-  console.log(res)
  
 }
 
@@ -57,8 +65,8 @@ document.querySelector('.btn--password').addEventListener('click',(e)=>{
   console.log(password,newpassword,passwordConfirm)
   passwordAccount(password,newpassword,passwordConfirm)
 
-  document.querySelector('#password-current').value=' '
-  document.querySelector('#password').value=' '
-  document.querySelector('#password-confirm').value=' '
+  document.querySelector('#password-current').value='•••••••• '
+  document.querySelector('#password').value='•••••••• '
+  document.querySelector('#password-confirm').value='•••••••• '
 
 })

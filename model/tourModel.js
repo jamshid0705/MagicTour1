@@ -125,28 +125,28 @@ tourSchema.virtual('reviews',{
   foreignField:"tour"
 })
 
-// tourSchema.pre('save',function(next){  // ()=> ishlatib bolmaydi otasiga chiqib ketadi
-//   this.name=this.name+1;
-//   this.time=Date.now()
-//   next()
-// })
+tourSchema.pre('save',function(next){  // ()=> ishlatib bolmaydi otasiga chiqib ketadi
+  this.name=this.name+1;
+  this.time=Date.now()
+  next()
+})
 
-// tourSchema.post('save',function(doc,next){
-//   console.log(Date.now()-doc.time)
-//   next()
-// })
+tourSchema.post('save',function(doc,next){
+  console.log(Date.now()-doc.time)
+  next()
+})
 
-// // Query Middleware  // find findById findByIdAndDelete
+// Query Middleware  // find findById findByIdAndDelete
 
-// tourSchema.pre('find',function(next){
-//   this.find({price:{$gte:100}})  // $ne teng emas
-//   next()
-// })
+tourSchema.pre('find',function(next){
+  this.find({price:{$gte:100}})  // $ne teng emas
+  next()
+})
 
-// tourSchema.post('find',function(doc,next){
-//   // console.log(doc)
-//   next()
-// })
+tourSchema.post('find',function(doc,next){
+  // console.log(doc)
+  next()
+})
 
 // // Data Validation: Build in validations
 

@@ -3,6 +3,7 @@ const tourRouter=require('./router/tourRouter')
 const userRouter=require('./router/userRouter')
 const reviewRouter=require('./router/reviewRouter')
 const viewRout=require('./router/viewRout')
+const langRout=require('./router/langRouter')
 const appError=require('./utility/appError')
 const helmet=require('helmet') // http ni secureti sini kuchaytirish masalan header ni
 const rateLimit=require('express-rate-limit') 
@@ -57,6 +58,7 @@ app.get('/home',(req,res)=>{
 app.use('/api/v1/tours',tourRouter)
 app.use('/api/v1/users',userRouter) 
 app.use('/api/v1/reviews',reviewRouter) // middleware
+app.use('/api/v1/language',langRout)
 
 app.all('*',function(req,res,next){
   //  const err={
