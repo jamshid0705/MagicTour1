@@ -1,14 +1,11 @@
 
-const settingAccount=async(name,email)=>{
+const settingAccount=async(formData)=>{
 
  try {
   const res=await axios({
     method:'PATCH',
     url:`http://localhost:8000/api/v1/users/updateMeData`,
-    data:{
-      name:name,
-      email:email
-    }
+    data:formData
   })
     if(res.status==200){
       alert('Sizning name va email ingiz yangilandi !')
@@ -37,12 +34,15 @@ const passwordAccount=async(password,newpassword,passwordConfirm)=>{
     })
       if(res.status==200){
         alert('Sizning passwordingiz yangilandi !')
+        window.setTimeout(()=>{
+          location.assign('/')
+        },500)
       }
     console.log(res)
   } catch (error) {
     alert('Sizning passwordingiz yangilandi !')
       window.setTimeout(()=>{
-        location.reload('/')
+        location.reload(true)
       },500)
   }
   
@@ -53,9 +53,15 @@ document.querySelector('.form-user-data').addEventListener('submit',(e)=>{
   e.preventDefault()
   const name=document.querySelector('#name').value
   const email=document.querySelector('#email').value
+  const photo=document.querySelector('#photo').files[0]
 
-  console.log(name,email)
-  settingAccount(name,email)
+  let formData=new FormData()
+  formData.append('name',name)
+  formData.append('email',email)
+  formData.append('photo',photo)
+
+  console.log(name,email,photo)
+  settingAccount(formData)
  
   document.querySelector('#name').value=' '
   document.querySelector('#email').value=' '

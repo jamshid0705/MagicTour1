@@ -19,7 +19,8 @@ const userSchema = new mongoose.Schema({
     validate:[validator.isEmail,'togri email kiriting']
     },
     photo:
-      {type:String},
+      {type:String,
+      default:'default.jpg'},
     password:{
         type:String,
         required:[true,'Siz password kiritishungiz kerak'],
