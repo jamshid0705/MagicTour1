@@ -135,42 +135,19 @@ const protect = catchError(async (req, res, next) => {
 
 /////////////// isSignin //////////////////
 const isSignIn= async (req, res, next) => {
-
-  // 1. Token bor yoqligini tekshirish headerdan
-  console.log(req.originalUrl)
-  let token;
   if(req.cookies.jwt){  // client tomonidan kelayotgan cookieni olish
-    token=req.cookies.jwt
-  }
+    // console.log(req.cookies.jwt)
+    const token=req.cookies.jwt
+    const tokencha=jwt.verify(token,process.env.JWT_SECRET)
 
-  if (!token || token=='null' || token=='logout') {
-    return next();
-  }
-
-  // 2.Tokenni tekshirish user olib ketgan token bn serverni tokeni
-
-    const tokencha=jwt.verify(token, process.env.JWT_SECRET);
-
-    // console.log(tokencha)
-  // 3.Tokenni ichidan idni olib data basedagi userlarni id si bilan solishtirish
-
-  const user=await User.findOne({_id:tokencha.id})
-  if(!user){
+    const user=await User.findOne({_id:tokencha.id})
+    res.locals.user=user
     return next()
   }
-  // 4. Agar parol o'zgargan bo'lsa tokenni amal qilmasligini tekshirish
-
-  if(user.passwordChangedDate){
-    // console.log(tokencha.exp)
-    // console.log(user.passwordChangedDate.getTime()/1000)
-    if(user.passwordChangedDate.getTime()/1000>tokencha.exp){
-      return next()
-    }
+  if(!req.cookies.jwt){
+    res.locals.user=undefined // pugga userni berish malumotlarni
+    return next()
   }
-
-  res.locals.user=user // pug userni berihs malumotlarnini
- 
-  return next();
 };
 
 //////////////////////////  role  ///////////////////////
@@ -223,9 +200,6 @@ const forgotpassword=catchError(async(req,res,next)=>{
 
   next()
 })
-
-
-
 
 ////////////////////////
 const resentPassword=catchError(async(req,res,next)=>{

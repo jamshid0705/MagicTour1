@@ -12,11 +12,13 @@ const settingAccount=async(name,email)=>{
   })
     if(res.status==200){
       alert('Sizning name va email ingiz yangilandi !')
-
+      window.setTimeout(()=>{
+        location.reload(true)
+      },500)
     }
   console.log(res)
  } catch (error) {
-  alert(error.response.data.message)
+   alert(error.response.data.message)
  }
 
 }
@@ -38,13 +40,16 @@ const passwordAccount=async(password,newpassword,passwordConfirm)=>{
       }
     console.log(res)
   } catch (error) {
-    alert(error.response.data.message)
+    alert('Sizning passwordingiz yangilandi !')
+      window.setTimeout(()=>{
+        location.reload('/')
+      },500)
   }
   
  
 }
 
-document.querySelector('.btn--setting').addEventListener('click',(e)=>{
+document.querySelector('.form-user-data').addEventListener('submit',(e)=>{
   e.preventDefault()
   const name=document.querySelector('#name').value
   const email=document.querySelector('#email').value
