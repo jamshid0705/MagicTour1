@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const appError = require('../utility/appError');
 const bcrypt = require('bcrypt');
 const mail = require('../utility/mai');
+const Email = require('../utility/mai');
 const crypto = require('crypto');
 
 /// create token
@@ -37,6 +38,8 @@ const signup = catchError(async (req, res, next) => {
   const token = createToken(newUser._id);
 
   saveTokenCookie(token, res, req);
+  const url = 'http://localhost:8000/overview';
+  await new Email(newUser, url).sendWelcome();
 
   res.status(200).json({
     status: 'success',
@@ -121,7 +124,7 @@ const protect = catchError(async (req, res, next) => {
   // 4. Agar parol o'zgargan bo'lsa tokenni amal qilmasligini tekshirish
 
   if (user.passwordChangedDate) {
-    // console.log(tokencha.exp)
+    console.log(tokencha);
     // console.log(user.passwordChangedDate.getTime()/1000)
     if (user.passwordChangedDate.getTime() / 1000 > tokencha.exp) {
       return next(
@@ -144,12 +147,12 @@ const isSignIn = async (req, res, next) => {
     // console.log(req.cookies.jwt)
     const token = req.cookies.jwt;
     const tokencha = jwt.verify(token, process.env.JWT_SECRET);
-
     const user = await User.findOne({ _id: tokencha.id });
     res.locals.user = user;
     return next();
   }
   if (!req.cookies.jwt) {
+    console.log('token yoq');
     res.locals.user = undefined; // pugga userni berish malumotlarni
     return next();
   }
@@ -197,7 +200,7 @@ const forgotpassword = catchError(async (req, res, next) => {
   const html = `<h1>Siz password reset qilish uchun quyidgi tugmani bosing</h1>><a style='color:red' href='${resentLink}'>Reset Password </a>`;
   const to = 'jamshidshamshod0705@gmail.com';
 
-  await mail({ subject, html, to });
+  await new Email(user,resentLink).sendPassword()
 
   res.status(200).json({
     status: 'success',

@@ -12,7 +12,7 @@ const tourRouter = express.Router();
 tourRouter.route('/aggregate').get(auth.role,Tour.aggregation)
 tourRouter.route('/aggregate/:year').get(auth.role,Tour.dataSort)
 
-tourRouter.route('/').get(Tour.getAllTour).post(Tour.addTour);
+tourRouter.route('/').get(Tour.getAllTour).post(auth.protect,Tour.addTour);
 
 // tourRouter.route('/:id/reviews').get(Tour.getReviewByTour) //xato usul
 
@@ -21,7 +21,7 @@ tourRouter.use('/:id/reviews',reviewRout)
 tourRouter
   .route('/:id')
   .get(Tour.getIdTour)
-  .patch(auth.role(['admin','lead-guide']),Tour.updateTour)
+  .patch(auth.protect,Tour.uploadTourImages,Tour.resizeImage,Tour.updateTour)
   .delete(auth.role(['admin','lead-guide']),Tour.deleteTour);
 
 

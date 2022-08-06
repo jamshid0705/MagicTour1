@@ -23,6 +23,6 @@ userRouter
   .route('/:id')
   .patch(auth.protect, User.updateUsers)
   .patch(auth.protect, User.getIdUsers)
-  .delete(auth.protect, auth.role(['admin', 'team-lead']), User.deleteUsers);
+  .delete(auth.protect,  User.deleteUsers);
 
 module.exports = userRouter;
