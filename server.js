@@ -2,8 +2,6 @@ const dotenv = require('dotenv'); // globalni o'zgaruvchilarga saqlash
 dotenv.config({ path: './config.env' });
 const app = require('./app');
 const mongoose = require('mongoose');
-const tourRouter = require('./router/tourRouter');
-const mail = require('./utility/mai');
 
 // Exception error async
 
@@ -23,7 +21,7 @@ mongoose.connect(dbTour, {}).then(() => {
 });
 
 app.listen(+process.env.PORT, process.env.URL, () => {
-  console.log('ulandingiz');
+  console.log(`${process.env.PORT} port sizni tinglamoqda !`);
 });
 
 // Rejection error async

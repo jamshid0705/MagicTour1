@@ -72,4 +72,3 @@ app.all('*',function(req,res,next){
 app.use(appErrorController)
 
 module.exports=app
-// console.log(process.env)
