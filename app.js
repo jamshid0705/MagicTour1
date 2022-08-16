@@ -17,6 +17,54 @@ const appErrorController=require('./controller/appErrorController')
 const { urlencoded } = require('express')
 const app=express();
 
+////////////////////////////////////////////////////// sign in ////////////////////////////////////////////////
+
+const session=require('express-session')
+const passport=require('passport')
+require('./password-setup')
+
+// app.use(passport.initialize());
+// app.use(passport.session());
+
+app.use(
+  session({
+    resave: false,
+    saveUninitialized: true,
+    secret: 'SECRET',
+  })
+);
+
+
+passport.serializeUser(function (user, cb) {
+  cb(null, user);
+});
+
+passport.deserializeUser(function (obj, cb) {
+  cb(null, obj);
+});
+
+app.get('/success', (req, res) => res.send(userProfile));
+app.get('/error', (req, res) => res.send('error logging in'));
+
+
+app.get('/google',(req,res)=>{
+  res.render('google')
+})
+
+app.get(
+  '/auth/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+
+ 
+app.get(
+  '/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/error' }),
+  function (req, res) {
+    // Successful authentication, redirect success.
+    res.redirect('/success');
+  }
+);
 
 //////////// rate limit /////////////////
 const limiter=rateLimit({

@@ -79,6 +79,8 @@ const login = catchError(async (req, res, next) => {
   const token = createToken(user._id);
   saveTokenCookie(token, res, req);
   // 5 javob qaytarish
+  const resentLink = 'http://localhost:8000/account';
+  await new Email(user, resentLink).sendMess();
   res.status(200).json({
     status: 'success',
     token: token,

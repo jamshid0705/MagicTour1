@@ -51,6 +51,9 @@ class Email{
   sendPassword(){
     this.sendMessage('reset-password','Passwordingizni shu yerda yangilang !')
   }
+  sendMess(){
+    this.sendMessage('reset',"passwordingizni tekshiring!")
+  }
 
 }
 
