@@ -144,6 +144,8 @@ const protect = catchError(async (req, res, next) => {
 
 /////////////// isSignin //////////////////
 const isSignIn = async (req, res, next) => {
+ 
+  console.log(req.cookies );
   if (req.cookies.jwt) {
     // client tomonidan kelayotgan cookieni olish
     // console.log(req.cookies.jwt)

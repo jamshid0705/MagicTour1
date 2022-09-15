@@ -23,6 +23,8 @@ const session=require('express-session')
 const passport=require('passport')
 require('./password-setup')
 
+
+
 // app.use(passport.initialize());
 // app.use(passport.session());
 
@@ -43,7 +45,10 @@ passport.deserializeUser(function (obj, cb) {
   cb(null, obj);
 });
 
-app.get('/success', (req, res) => res.send(userProfile));
+app.get('/success', (req, res) =>{
+  
+  res.redirect('/overview');
+});
 app.get('/error', (req, res) => res.send('error logging in'));
 
 
@@ -59,12 +64,14 @@ app.get(
  
 app.get(
   '/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/error' }),
+  passport.authenticate('google', { failureRedirect: '/failed' }),
   function (req, res) {
     // Successful authentication, redirect success.
     res.redirect('/success');
   }
 );
+
+
 
 //////////// rate limit /////////////////
 const limiter=rateLimit({
@@ -72,7 +79,6 @@ const limiter=rateLimit({
   windowMs:1*60*1000,
   message:'Siz ko\'p so\'rov berib yubordingiz !'
 })
-
 
 
 /////////// middleware //////////////
