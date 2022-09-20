@@ -17,16 +17,8 @@ const appErrorController=require('./controller/appErrorController')
 const { urlencoded } = require('express')
 const app=express();
 
-////////////////////////////////////////////////////// sign in ////////////////////////////////////////////////
 
-const session=require('express-session')
-const passport=require('passport')
-require('./password-setup')
-
-
-
-// app.use(passport.initialize());
-// app.use(passport.session());
+const session = require('express-session');
 
 app.use(
   session({
@@ -35,43 +27,24 @@ app.use(
     secret: 'SECRET',
   })
 );
-
-
-passport.serializeUser(function (user, cb) {
-  cb(null, user);
-});
-
-passport.deserializeUser(function (obj, cb) {
-  cb(null, obj);
-});
-
-app.get('/success', (req, res) =>{
-  
-  res.redirect('/overview');
-});
-app.get('/error', (req, res) => res.send('error logging in'));
-
-
-app.get('/google',(req,res)=>{
-  res.render('google')
-})
-
-app.get(
-  '/auth/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] })
-);
-
  
-app.get(
-  '/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/failed' }),
-  function (req, res) {
-    // Successful authentication, redirect success.
-    res.redirect('/success');
-  }
-);
 
+const jwt=require('jsonwebtoken')
+/// create token
+const createToken = function (id) {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  });
+};
 
+/////////// cookie /////////////
+const saveTokenCookie = (token, res, req) => {
+  res.cookie('jwt', token, {
+    maxAge: process.env.JWT_EXPIRES_DATA * 24 * 60 * 60 * 1000, // nechi kun berish vaqti token
+    httpOnly: true,
+    secure: req.protocol === 'https' ? true : false,
+  });
+};
 
 //////////// rate limit /////////////////
 const limiter=rateLimit({
@@ -109,6 +82,68 @@ app.get('/home',(req,res)=>{
   console.log(req)
   res.status(200).render('base')
 })
+
+////////////////////////////////////////////////////// sign in ////////////////////////////////////////////////
+
+const passport=require('passport')
+require('./password-setup')
+const Tour=require('./model/tourModel')
+
+
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+
+const tekshir=(req,res,next)=>{
+  if(req.user){
+    const token=createToken(req.user.id)
+    saveTokenCookie(token,res,req)
+   
+    // console.log(res.user)
+    next()
+  }
+  else{
+    console.log('user yoq')
+  }
+}
+
+
+app.get('/success', tekshir,async(req, res) =>{
+  const data = await Tour.find();
+  const user1 = {
+    name: req.user.displayName,
+    photo: req.user.picture
+  };
+  res.status(200).render('overview', {
+    tour: data,
+    user:user1
+  });
+});
+app.get('/error', (req, res) => res.send('error logging in'));
+
+
+app.get('/google',(req,res)=>{
+  res.render('google')
+})
+
+app.get(
+  '/auth/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+
+ 
+app.get(
+  '/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/failed' }),
+  function (req, res) {
+    // Successful authentication, redirect success.
+    res.redirect('/success');
+  }
+);
+
+
 app.use('/api/v1/tours',tourRouter)
 app.use('/api/v1/users',userRouter) 
 app.use('/api/v1/reviews',reviewRouter) // middleware
