@@ -20,13 +20,13 @@ const signupUser=async(name,email,pass,re_pass)=>{
       },1000)
     }
   } catch (error) {
-    // console.log(error.message)
-    if(res.status==404){
-      alert('You have an error !')
-      window.setTimeout(()=>{
-        location.assign('signup')
-      },1000)
-    }
+    console.log(error.message)
+    // if(res.status==404){
+    //   alert('You have an error !')
+    //   window.setTimeout(()=>{
+    //     location.assign('signup')
+    //   },1000)
+    // }
   }
 }
 
