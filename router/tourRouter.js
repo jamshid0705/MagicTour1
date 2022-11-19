@@ -21,8 +21,8 @@ tourRouter.use('/:id/reviews',reviewRout)
 tourRouter
   .route('/:id')
   .get(Tour.getIdTour)
-  .patch(auth.protect,Tour.uploadTourImages,Tour.resizeImage,Tour.updateTour)
-  .delete(auth.role(['admin','lead-guide']),Tour.deleteTour);
+  .patch(auth.protect, Tour.uploadTourImages, Tour.resizeImage, Tour.updateTour)
+  .delete(auth.role(['admin', 'lead-guide']), Tour.deleteTour);
 
 
 

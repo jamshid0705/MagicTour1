@@ -159,7 +159,7 @@ const isSignIn = async (req, res, next) => {
     console.log('token yoq');
     res.locals.user = undefined; // pugga userni berish malumotlarni
     return next();
-  }
+  } 
 };
 
 //////////////////////////  role  ///////////////////////

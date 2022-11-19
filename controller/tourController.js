@@ -75,7 +75,7 @@ const options2 = {
 };
 
 const getAllTour = (req, res, next) => {
-  console.log(options2);
+  // console.log(options2);
   getAll(req, res, next, Tour, options, options2);
 };
 // get id
@@ -92,7 +92,7 @@ const addTour = (req, res, next) => {
 
 // patch
 const updateTour = (req, res, next) => {
-  console.log(req.files);
+  // console.log(req.files);
   update(req, res, next, Tour);
 };
 
