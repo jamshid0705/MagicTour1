@@ -6,7 +6,7 @@ const authController=require('../controller/authController')
 
 Router.route('/').get(authController.isSignIn,viewController.getAllTour)
 Router.route('/overview').get(authController.isSignIn,viewController.getAllTour);
-Router.route('/tour/:id').get(viewController.getIdTour)
+Router.route('/tour/:id').get(authController.isSignIn,viewController.getIdTour);
 Router.route('/login').get(viewController.login)
 Router.route('/signup').get(viewController.signup);
 Router.route('/account').get(authController.protect,viewController.account)

@@ -94,7 +94,7 @@ const protect = catchError(async (req, res, next) => {
   // 1. Token bor yoqligini tekshirish headerdan
 
   let token;
-
+   console.log("requiest ",req)
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith('Bearer')
@@ -145,10 +145,10 @@ const protect = catchError(async (req, res, next) => {
 /////////////// isSignin //////////////////
 const isSignIn = async (req, res, next) => {
  
-  console.log("cookie",req.user);
+  console.log("cookie1",req.user);
   if (req.cookies.jwt) {
     // client tomonidan kelayotgan cookieni olish
-    // console.log(req.cookies.jwt)
+    console.log(req.cookies.jwt)
     const token = req.cookies.jwt;
     const tokencha = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findOne({ _id: tokencha.id });
